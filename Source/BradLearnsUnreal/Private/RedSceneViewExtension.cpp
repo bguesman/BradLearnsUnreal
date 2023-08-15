@@ -55,6 +55,7 @@ void FRedSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphB
 	checkSlow(View.bIsViewInfo); // can't do dynamic_cast because FViewInfo doesn't have any virtual functions.
 	const FIntRect Viewport = static_cast<const FViewInfo&>(View).ViewRect;
 	FScreenPassTexture SceneColor((*Inputs.SceneTextures)->SceneColorTexture, Viewport);
+	FScreenPassTexture SceneDepth((*Inputs.SceneTextures)->CustomDepthTexture, Viewport);
 	FGlobalShaderMap* GlobalShaderMap = GetGlobalShaderMap(GMaxRHIFeatureLevel);
 
 	RDG_EVENT_SCOPE(GraphBuilder, "Red Scene View Extension Render Pass");
@@ -67,6 +68,7 @@ void FRedSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphB
 	TShaderMapRef<FRecolorShaderPS> RecolorPixelShader(GlobalShaderMap);
 	FRecolorShaderPS::FParameters* RecolorParameters = GraphBuilder.AllocParameters<FRecolorShaderPS::FParameters>();
 	RecolorParameters->SceneColor = SceneColor.Texture;
+	RecolorParameters->SceneDepth = SceneDepth.Texture;
 	RecolorParameters->InputSampler = TStaticSamplerState<SF_Point, AM_Clamp, AM_Clamp, AM_Clamp>::GetRHI();
 	RecolorParameters->ViewParams = SceneTextureViewportParams;
 	RecolorParameters->RenderTargets[0] = FRenderTargetBinding(SceneColor.Texture, ERenderTargetLoadAction::ELoad);

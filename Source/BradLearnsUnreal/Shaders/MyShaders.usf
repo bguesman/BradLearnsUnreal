@@ -5,6 +5,7 @@
 SCREEN_PASS_TEXTURE_VIEWPORT(ViewParams)
 SamplerState InputSampler;
 Texture2D SceneColor;
+Texture2D SceneDepth;
 
 float2 PosToUV(float2 Pos) {
 	float2 ViewportUV = ((Pos - ViewParams_ViewportMin.xy) * ViewParams_ViewportSizeInverse.xy);
@@ -13,5 +14,9 @@ float2 PosToUV(float2 Pos) {
 
 float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
 	float2 UV = PosToUV(SvPosition.xy);
-	return Texture2DSample(SceneColor, InputSampler, UV) * float4(1, 0, 0, 1);
+	float4 color = Texture2DSample(SceneColor, InputSampler, UV);
+	float depth = Texture2DSample(SceneDepth, InputSampler, UV);
+	float3 T = exp(-max(0, depth * 0.1));
+	float3 finalColor = color.xyz * T + (1 - T) * 50;
+	return float4(finalColor, 1);
 }
