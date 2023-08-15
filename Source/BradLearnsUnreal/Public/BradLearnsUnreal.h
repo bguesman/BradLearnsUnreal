@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 #include "MyBlueprintFunctionLibrary.h"
+#include "RedSceneViewExtension.h"
 
 class FBradLearnsUnrealModule : public IModuleInterface
 {
@@ -14,5 +15,6 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
-	void PrintToScreen();
+private:
+	TSharedPtr<class FRedSceneViewExtension, ESPMode::ThreadSafe> RedSceneViewExtension;
 };

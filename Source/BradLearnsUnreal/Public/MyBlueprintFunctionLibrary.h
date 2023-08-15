@@ -18,4 +18,7 @@ class UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 public:
   UFUNCTION(BlueprintCallable, category = "MyBlueprintFunctionLibrary")
   static void PrintText(FString TextToPrint);
+
+  UFUNCTION(BlueprintCallable, category = "MyBlueprintFunctionLibrary")
+  static void PrintModuleIsLoaded();
 };
