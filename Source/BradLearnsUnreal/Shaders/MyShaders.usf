@@ -1,0 +1,17 @@
+#include "/Engine/Public/Platform.ush"
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/ScreenPass.ush"
+
+SCREEN_PASS_TEXTURE_VIEWPORT(ViewParams)
+SamplerState InputSampler;
+Texture2D SceneColor;
+
+float2 PosToUV(float2 Pos) {
+	float2 ViewportUV = ((Pos - ViewParams_ViewportMin.xy) * ViewParams_ViewportSizeInverse.xy);
+	return ViewportUV * ViewParams_UVViewportSize + ViewParams_UVViewportMin;
+}
+
+float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
+	float2 UV = PosToUV(SvPosition.xy);
+	return Texture2DSample(SceneColor, InputSampler, UV) * float4(1, 0, 0, 1);
+}

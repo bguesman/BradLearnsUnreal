@@ -10,6 +10,7 @@
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
+	"EnabledByDefault": false,
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
@@ -18,7 +19,7 @@
 		{
 			"Name": "BradLearnsUnreal",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+  		"LoadingPhase": "PostConfigInit"
 		}
 	]
 }
