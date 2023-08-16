@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
-#include "MyBlueprintFunctionLibrary.h"
-#include "RedSceneViewExtension.h"
 
 class FBradLearnsUnrealModule : public IModuleInterface
 {

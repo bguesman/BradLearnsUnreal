@@ -1,24 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "SceneViewHolder.h"
+#include "SimpleFog.h"
 
 // Sets default values
-ASceneViewHolder::ASceneViewHolder()
+ASimpleFog::ASimpleFog()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
-void ASceneViewHolder::BeginPlay()
+void ASimpleFog::BeginPlay()
 {
 	Super::BeginPlay();	
-
-	this->SimpleFogSceneViewExtension = FSceneViewExtensions::NewExtension<FSimpleFogSceneViewExtension>(fog);
 }
 
 // Called every frame
-void ASceneViewHolder::Tick(float DeltaTime)
+void ASimpleFog::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }

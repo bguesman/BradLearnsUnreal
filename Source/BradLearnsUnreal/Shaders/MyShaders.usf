@@ -19,13 +19,14 @@ float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
 	float deviceDepth = Texture2DSample(SceneDepth, InputSampler, UV);
 	float sceneDepth = ConvertFromDeviceZ(deviceDepth);
 
-	float clampedDepth = min(sceneDepth, 10000);
+	float clampedDepth = min(sceneDepth, 25000);
 	
-	float density = 10;
+	float density = 20;
+	float3 fogColor = float3(0.7, 0.92, 0.99);
 
-	float3 transmittance = exp(-clampedDepth * density * 1e-5);
+	float3 transmittance = exp(-clampedDepth * density * 1e-5 * fogColor);
 	const float3 lightColor = 1;
 
-	float3 finalColor = color.xyz * transmittance + (1 - transmittance) * lightColor;
+	float3 finalColor = color.xyz * transmittance + (1 - transmittance) * lightColor * fogColor;
 	return float4(finalColor, 1);
 }

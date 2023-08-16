@@ -1,10 +1,14 @@
-#include "RedSceneViewExtension.h"
+#include "SimpleFogSceneViewExtension.h"
+#include "SimpleFog.h"
 #include "MyShaders.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "PixelShaderUtils.h"
 #include "PostProcess/PostProcessing.h"
 
-FRedSceneViewExtension::FRedSceneViewExtension(const FAutoRegister& AutoRegister) : FSceneViewExtensionBase(AutoRegister) 
+FSimpleFogSceneViewExtension::FSimpleFogSceneViewExtension(const FAutoRegister& AutoRegister, ASimpleFog* simpleFog) 
+	: FSceneViewExtensionBase(AutoRegister), 
+	simpleFog(simpleFog)
 {
 }
 
@@ -48,8 +52,11 @@ FScreenPassTextureViewportParameters GetTextureViewportParameters(const FScreenP
 	return Parameters;
 }
 
-void FRedSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
+void FSimpleFogSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
 {
+	if (simpleFog == nullptr)
+		return;
+
 	checkSlow(View.bIsViewInfo); // can't do dynamic_cast because FViewInfo doesn't have any virtual functions.
 	const FIntRect Viewport = static_cast<const FViewInfo&>(View).ViewRect;
 	FScreenPassTexture SceneColor((*Inputs.SceneTextures)->SceneColorTexture, Viewport);
