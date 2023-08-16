@@ -16,13 +16,18 @@ void ASceneViewHolder::BeginPlay()
 {
 	Super::BeginPlay();	
 	
-	this->RedSceneViewExtension = FSceneViewExtensions::NewExtension<FRedSceneViewExtension>();
 }
 
 // Called every frame
 void ASceneViewHolder::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!m_bRegistered)
+	{
+		this->RedSceneViewExtension = FSceneViewExtensions::NewExtension<FRedSceneViewExtension>();
+		m_bRegistered = true;
+	}
 
 }
 

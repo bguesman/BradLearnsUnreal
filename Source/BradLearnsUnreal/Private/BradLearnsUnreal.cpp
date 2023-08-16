@@ -13,7 +13,10 @@ void FBradLearnsUnrealModule::StartupModule()
 	FString ModuleShaderDir = FPaths::Combine(BaseDir, TEXT("Source/BradLearnsUnreal/Shaders"));
 	// TODO [BRAD]: this causes an assertion crash because it's already been added if you
 	// try to recompile it in editor
-	AddShaderSourceDirectoryMapping(TEXT("/BradLearnsUnreal"), ModuleShaderDir);
+	if (!AllShaderSourceDirectoryMappings().Contains(TEXT("/BradLearnsUnreal")))
+	{
+		AddShaderSourceDirectoryMapping(TEXT("/BradLearnsUnreal"), ModuleShaderDir);
+	}
 
 	if (GEngine)
 	{

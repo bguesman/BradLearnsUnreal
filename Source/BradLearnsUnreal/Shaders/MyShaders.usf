@@ -15,8 +15,17 @@ float2 PosToUV(float2 Pos) {
 float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
 	float2 UV = PosToUV(SvPosition.xy);
 	float4 color = Texture2DSample(SceneColor, InputSampler, UV);
-	float depth = Texture2DSample(SceneDepth, InputSampler, UV);
-	float3 T = exp(-max(0, depth * 0.1));
-	float3 finalColor = color.xyz * T + (1 - T) * 50;
+
+	float deviceDepth = Texture2DSample(SceneDepth, InputSampler, UV);
+	float sceneDepth = ConvertFromDeviceZ(deviceDepth);
+
+	float clampedDepth = min(sceneDepth, 10000);
+	
+	float density = 10;
+
+	float3 transmittance = exp(-clampedDepth * density * 1e-5);
+	const float3 lightColor = 1;
+
+	float3 finalColor = color.xyz * transmittance + (1 - transmittance) * lightColor;
 	return float4(finalColor, 1);
 }

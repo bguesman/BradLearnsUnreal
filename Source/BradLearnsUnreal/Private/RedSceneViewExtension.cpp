@@ -50,12 +50,10 @@ FScreenPassTextureViewportParameters GetTextureViewportParameters(const FScreenP
 
 void FRedSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Running red scene view ext");
-
 	checkSlow(View.bIsViewInfo); // can't do dynamic_cast because FViewInfo doesn't have any virtual functions.
 	const FIntRect Viewport = static_cast<const FViewInfo&>(View).ViewRect;
 	FScreenPassTexture SceneColor((*Inputs.SceneTextures)->SceneColorTexture, Viewport);
-	FScreenPassTexture SceneDepth((*Inputs.SceneTextures)->CustomDepthTexture, Viewport);
+	FScreenPassTexture SceneDepth((*Inputs.SceneTextures)->SceneDepthTexture, Viewport);
 	FGlobalShaderMap* GlobalShaderMap = GetGlobalShaderMap(GMaxRHIFeatureLevel);
 
 	RDG_EVENT_SCOPE(GraphBuilder, "Red Scene View Extension Render Pass");

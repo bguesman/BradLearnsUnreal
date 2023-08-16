@@ -27,4 +27,5 @@ public:
 
 private:
 	TSharedPtr<class FRedSceneViewExtension, ESPMode::ThreadSafe> RedSceneViewExtension;
+	bool m_bRegistered = false;
 };
