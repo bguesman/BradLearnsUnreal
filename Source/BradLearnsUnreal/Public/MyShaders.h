@@ -4,6 +4,9 @@
 #include "ScreenPass.h"
 
 BEGIN_SHADER_PARAMETER_STRUCT(FRecolorShaderParameters, )
+	SHADER_PARAMETER(FLinearColor, Scattering)
+	SHADER_PARAMETER(FLinearColor, Extinction)
+	SHADER_PARAMETER(FLinearColor, MaxDistAndDensity)
 	SHADER_PARAMETER_RDG_TEXTURE(Texture2D, SceneColor)
 	SHADER_PARAMETER_RDG_TEXTURE(Texture2D, SceneDepth)
 	SHADER_PARAMETER_SAMPLER(SamplerState, InputSampler)

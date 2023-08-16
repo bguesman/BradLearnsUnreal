@@ -75,6 +75,9 @@ void FSimpleFogSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& 
 	RecolorParameters->SceneColor = SceneColor.Texture;
 	RecolorParameters->SceneDepth = SceneDepth.Texture;
 	RecolorParameters->InputSampler = TStaticSamplerState<SF_Point, AM_Clamp, AM_Clamp, AM_Clamp>::GetRHI();
+	RecolorParameters->Scattering = simpleFog->Scattering;
+	RecolorParameters->Extinction = simpleFog->Extinction;
+	RecolorParameters->MaxDistAndDensity = FLinearColor(simpleFog->MaxDistance, simpleFog->Density, 0, 0);
 	RecolorParameters->ViewParams = SceneTextureViewportParams;
 	RecolorParameters->RenderTargets[0] = FRenderTargetBinding(SceneColor.Texture, ERenderTargetLoadAction::ELoad);
 

@@ -6,6 +6,9 @@ SCREEN_PASS_TEXTURE_VIEWPORT(ViewParams)
 SamplerState InputSampler;
 Texture2D SceneColor;
 Texture2D SceneDepth;
+float4 Scattering;
+float4 Extinction;
+float4 MaxDistAndDensity;
 
 float2 PosToUV(float2 Pos) {
 	float2 ViewportUV = ((Pos - ViewParams_ViewportMin.xy) * ViewParams_ViewportSizeInverse.xy);
@@ -16,17 +19,16 @@ float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
 	float2 UV = PosToUV(SvPosition.xy);
 	float4 color = Texture2DSample(SceneColor, InputSampler, UV);
 
-	float deviceDepth = Texture2DSample(SceneDepth, InputSampler, UV);
+	float deviceDepth = Texture2DSample(SceneDepth, InputSampler, UV).r;
 	float sceneDepth = ConvertFromDeviceZ(deviceDepth);
 
-	float clampedDepth = min(sceneDepth, 25000);
-	
-	float density = 20;
-	float3 fogColor = float3(0.7, 0.92, 0.99);
+	float3 opticalDepth = min(sceneDepth, MaxDistAndDensity.x) * MaxDistAndDensity.y * 1e-5 * Extinction.xyz;
 
-	float3 transmittance = exp(-clampedDepth * density * 1e-5 * fogColor);
+	float3 transmittance = exp(-opticalDepth);
+
 	const float3 lightColor = 1;
+	
+	float3 finalColor = color.xyz * transmittance + (1 - transmittance) * lightColor * Scattering.xyz;
 
-	float3 finalColor = color.xyz * transmittance + (1 - transmittance) * lightColor * fogColor;
 	return float4(finalColor, 1);
 }

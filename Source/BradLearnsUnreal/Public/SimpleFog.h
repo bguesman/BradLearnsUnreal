@@ -12,6 +12,16 @@ class BRADLEARNSUNREAL_API ASimpleFog : public AActor
 {
 	GENERATED_BODY()
 	
+public:
+  UPROPERTY(EditAnywhere, Category = "Brad Learns Unreal")
+  FLinearColor Scattering;
+  UPROPERTY(EditAnywhere, Category = "Brad Learns Unreal")
+  FLinearColor Extinction;
+  UPROPERTY(EditAnywhere, Category = "Brad Learns Unreal")
+  float Density;
+	UPROPERTY(EditAnywhere, Category = "Brad Learns Unreal")
+  float MaxDistance;
+
 public:	
 	// Sets default values for this actor's properties
 	ASimpleFog();
