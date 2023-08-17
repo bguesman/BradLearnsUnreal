@@ -8,7 +8,8 @@ Texture2D SceneColor;
 Texture2D SceneDepth;
 float4 Scattering;
 float4 Extinction;
-float4 MaxDistAndDensity;
+float MaximumDistance;
+float Density;
 
 float2 PosToUV(float2 Pos) {
 	float2 ViewportUV = ((Pos - ViewParams_ViewportMin.xy) * ViewParams_ViewportSizeInverse.xy);
@@ -26,10 +27,10 @@ float4 RecolorMainPS(float4 SvPosition : SV_POSITION) : SV_Target0 {
 	// Height-based density
 	// TODO: height seems not to work here
 	// float3 worldPos = SvPositionToTranslatedWorld(SvPosition);
-	float density = MaxDistAndDensity.y;// * saturate((-worldPos.z / 1000.0));
+	float density = Density;// * saturate((-worldPos.z / 1000.0));
 
 	// Convert to optical depth
-	float3 opticalDepth = min(sceneDepth, MaxDistAndDensity.x) * density * 1e-5f * Extinction.xyz;
+	float3 opticalDepth = min(sceneDepth, MaximumDistance) * density * 1e-5f * Extinction.xyz;
 
 	float3 transmittance = exp(-opticalDepth);
 
