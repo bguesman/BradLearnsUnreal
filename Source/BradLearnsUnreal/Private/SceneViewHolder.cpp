@@ -10,10 +10,17 @@ ASceneViewHolder::ASceneViewHolder()
 }
 
 // Called when the game starts or when spawned
+void ASceneViewHolder::PostLoad()
+{
+	Super::PostLoad();
+	// I THINK this is the right place to register the scene view ext
+	this->SimpleFogSceneViewExtension = FSceneViewExtensions::NewExtension<FSimpleFogSceneViewExtension>(GetWorld());
+}
+
+// Called when the game starts or when spawned
 void ASceneViewHolder::BeginPlay()
 {
 	Super::BeginPlay();	
-	this->SimpleFogSceneViewExtension = FSceneViewExtensions::NewExtension<FSimpleFogSceneViewExtension>(GetWorld());
 }
 
 // Called every frame

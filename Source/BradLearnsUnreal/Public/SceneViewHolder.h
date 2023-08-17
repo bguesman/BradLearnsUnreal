@@ -19,6 +19,11 @@ public:
 	ASceneViewHolder();
 
 protected:
+	// Called on CDO, on level load, and on play
+	// I THINK this is the right place to be registering the scene
+	// view extension
+	virtual void PostLoad() override;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
