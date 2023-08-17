@@ -6,9 +6,8 @@
 #include "PixelShaderUtils.h"
 #include "PostProcess/PostProcessing.h"
 
-FSimpleFogSceneViewExtension::FSimpleFogSceneViewExtension(const FAutoRegister& AutoRegister, ASimpleFog* simpleFog) 
-	: FSceneViewExtensionBase(AutoRegister), 
-	simpleFog(simpleFog)
+FSimpleFogSceneViewExtension::FSimpleFogSceneViewExtension(const FAutoRegister& AutoRegister, UWorld* InWorld) 
+	: FWorldSceneViewExtension(AutoRegister, InWorld)
 {
 }
 
@@ -52,10 +51,26 @@ FScreenPassTextureViewportParameters GetTextureViewportParameters(const FScreenP
 	return Parameters;
 }
 
+void FSimpleFogSceneViewExtension::SetupViewFamily(FSceneViewFamily& InViewFamily)
+{
+	// All world setup has to take place in a function not suffixed _RenderThread
+	// You can't access the world in that thread
+	
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASimpleFog::StaticClass(), fogsInScene);
+}
+
 void FSimpleFogSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessingInputs& Inputs)
 {
-	if (simpleFog == nullptr)
+	if (fogsInScene.Num() == 0)
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No fog objects found in world");
+		}
 		return;
+	}
+
+	ASimpleFog* simpleFog = (ASimpleFog*) fogsInScene[0];
 
 	checkSlow(View.bIsViewInfo); // can't do dynamic_cast because FViewInfo doesn't have any virtual functions.
 	const FIntRect Viewport = static_cast<const FViewInfo&>(View).ViewRect;
@@ -68,6 +83,7 @@ void FSimpleFogSceneViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& 
 	// Viewport parameters
 	const FScreenPassTextureViewport SceneColorTextureViewport(SceneColor);
 	const FScreenPassTextureViewportParameters SceneTextureViewportParams = GetTextureViewportParameters(SceneColorTextureViewport);
+
 
 	// Shader setup
 	TShaderMapRef<FRecolorShaderPS> RecolorPixelShader(GlobalShaderMap);

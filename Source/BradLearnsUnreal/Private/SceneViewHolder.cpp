@@ -13,8 +13,7 @@ ASceneViewHolder::ASceneViewHolder()
 void ASceneViewHolder::BeginPlay()
 {
 	Super::BeginPlay();	
-
-	this->SimpleFogSceneViewExtension = FSceneViewExtensions::NewExtension<FSimpleFogSceneViewExtension>(fog);
+	this->SimpleFogSceneViewExtension = FSceneViewExtensions::NewExtension<FSimpleFogSceneViewExtension>(GetWorld());
 }
 
 // Called every frame

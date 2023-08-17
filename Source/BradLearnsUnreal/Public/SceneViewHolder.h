@@ -13,10 +13,6 @@ UCLASS()
 class BRADLEARNSUNREAL_API ASceneViewHolder : public AActor
 {
 	GENERATED_BODY()
-	
-public:
-  UPROPERTY(EditAnywhere, Category = "Brad Learns Unreal")
-  class ASimpleFog* fog;
 
 public:	
 	// Sets default values for this actor's properties
